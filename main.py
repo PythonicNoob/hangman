@@ -1,19 +1,19 @@
 import pygame
 import math
 import random
+import string
 
 # game variables
 hm_status = 0
 # represents which hangman image to be displayed.
-guessed = []
-
+guessed = ["A", "I", "E", "O", "U"]
 
 # word selection
 wordlist = []
-choice = int(input("Type 1 for built-in list of words. Type 2 to make your own. "))
+choice = int(input("Type 1 for built-in list of words. Type 2 to make your own:\n"))
 
 if choice == 1:
-    diff = int(input("Enter 1 for indian states, 2 for fruits and 3 for cars. "))
+    diff = int(input("Enter 1 for indian states, 2 for fruits and 3 for cars:\n"))
     if diff == 1:
         wordlist = ["CHHATTISGARH", "GUJARAT", "HARYANA", "JHARKHAND", "MEGHALAYA", "MIZORAM",
                     "MANIPUR", "TRIPURA"]
@@ -23,14 +23,42 @@ if choice == 1:
     if diff == 3:
         wordlist = ["KOEINGSEGG", "VOLKSWAGEN", "LAMBORGHINI", "CHEVROLET", "SKODA", "MERCEDES",
                     "MAYBACH", "DATSUN"]
+# if choice == 2:
+#     n = int(input("Enter number of words in list: "))
+#     print("Enter words:")
+#     for i in range(n):
+#         wordlist.append(input("-"))
+
+
+#
+#  ~Ansh
+#   -Changed the way the words are entered.
+#   -Changed it to allow only letters. otherwise numbers can be entered and then in-game
+#    u do not have option to select numbers
+#
+
 if choice == 2:
-    n = int(input("Enter number of words in list: "))
-    print("Enter words:")
-    for i in range(n):
-        wordlist.append(input("-"))
+
+    print("Enter the word:")
+    while True:
+        a = input("-").lower()  # \n is newline. lower() converts it to lowercase
+
+        if a != "" and a.isspace() is False and a != "n" and a != "no":  # Check if it is blank or not
+
+            if a not in wordlist:
+                for letr in a:
+                    if letr not in string.ascii_letters:
+                        print("Please enter letters only from A-Z")
+                        break
+            else:
+                print("world already exists! please enter a new wrd")
+            wordlist.append(a)
+
+        else:
+            break
+
 w = random.choice(wordlist)
 word = w.upper()
-
 
 # setup display
 pygame.init()
@@ -50,13 +78,12 @@ letters = []
 startx = round((WIDTH - (RADIUS * 2 + GAP) * 13) / 2)
 # radius*2=diameter. diameter+gap=object. object*13 per row. width-objects=starting point.
 starty = 400
-A = 65 #65 is the ASCII value of letter a ~Ansh
+A = 65  # 65 is the ASCII value of letter a ~Ansh
 for i in range(26):
     x = startx + GAP * 2 + ((RADIUS * 2 + GAP) * (i % 13))
     # 13 letters each in 2 rows.
     y = starty + ((i // 13) * (GAP + RADIUS * 2))
-    letters.append([x, y, chr(A + i), True]) # chr converts ASCII code to letters
-
+    letters.append([x, y, chr(A + i), True])  # chr converts ASCII code to letters ~Ansh
 
 # creating fonts using font.SysFont('font name', font size)
 LETTER_FONT = pygame.font.SysFont('georgia', 35)
@@ -75,7 +102,7 @@ ALMOND = (239, 222, 205)
 AMARANTH = (229, 43, 80)
 
 
-def draw(): #def defines a function ~Ansh
+def draw():  # def defines a function ~Ansh
     window.fill(ALMOND)
     # background color
 
@@ -130,7 +157,9 @@ def display_message(message):
 
 
 def main():
-    global hm_status # variables inside a function are different from those outside function even if they have same name. to tell python that the variable outside the function and the variable inside it are same we use global. ~Ansh
+    # variables inside a function are different from those outside function even if they have same name.
+    # to tell python that the variable outside the function and the variable inside it are same we use global. ~Ansh
+    global hm_status
 
     fps = 60
     clock = pygame.time.Clock()
