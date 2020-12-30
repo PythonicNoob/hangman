@@ -78,12 +78,18 @@ letters = []
 startx = round((WIDTH - (RADIUS * 2 + GAP) * 13) / 2)
 # radius*2=diameter. diameter+gap=object. object*13 per row. width-objects=starting point.
 starty = 400
-A = 65  # 65 is the ASCII value of letter a ~Ansh
-for i in range(26):
+A = 65  # 65 is the ASCII value of capital letter A ~Ansh
+
+listofletters = string.ascii_uppercase # Storing all uppeercase letters in this variable
+for vowel in ["A", "I", "E", "O", "U"]: # Remove vowels as we dont need to type vowels
+    listofletters = listofletters.replace(vowel, "")
+
+
+for i, lr in enumerate(listofletters):
     x = startx + GAP * 2 + ((RADIUS * 2 + GAP) * (i % 13))
     # 13 letters each in 2 rows.
     y = starty + ((i // 13) * (GAP + RADIUS * 2))
-    letters.append([x, y, chr(A + i), True])  # chr converts ASCII code to letters ~Ansh
+    letters.append([x, y, lr, True])  # chr converts ASCII code to letters ~Ansh
 
 # creating fonts using font.SysFont('font name', font size)
 LETTER_FONT = pygame.font.SysFont('georgia', 35)
