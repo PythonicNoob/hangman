@@ -13,7 +13,6 @@ guessed = ["A", "I", "E", "O", "U", " "]
 
 # word selection
 wordlist = []
-choice = int(input("Type 1 for built-in list of words. Type 2 to make your own:\n"))
 dialog_box = True
 DIALOG_TEXT = ""
 DIALOG_TEXTBOX = None
@@ -25,99 +24,6 @@ CUSTOMPACK_PATH = "data/custompacks"
 custompacks = []
 [custompacks.append(file.replace(".txt", "")) for file in os.listdir(CUSTOMPACK_PATH)]
 
-
-if choice == 1:
-    diff = int(input("Enter 1 for indian states, 2 for fruits and 3 for cars:\n"))
-    if diff == 1:
-        wordlist = ["CHHATTISGARH", "GUJARAT", "HARYANA", "JHARKHAND", "MEGHALAYA", "MIZORAM",
-                    "MANIPUR", "TRIPURA"]
-    if diff == 2:
-        wordlist = ["DURIAN", "RAMBUTAN", "LEMON", "LYCHEE", "TOMATO", "POMEGRANATE", "AVOCADO",
-                    "CANTALOUPE"]
-    if diff == 3:
-        wordlist = ["KOEINGSEGG", "VOLKSWAGEN", "LAMBORGHINI", "CHEVROLET", "SKODA", "MERCEDES",
-                    "MAYBACH", "DATSUN"]
-if choice == 2:
-    n = int(input("Enter number of words in list: "))
-    print("Enter words:")
-    for i in range(n):
-        wordlist.append(input("-"))
-
-
-#
-#  ~Ansh
-#   -Changed the way the words are entered.
-#   -Changed it to allow only letters. otherwise numbers can be entered and then in-game
-#    u do not have option to select numbers
-#
-
-def use_prebuilt_pack(name):
-    if name in custompacks:
-        file = open(f"data\custompacks\{name}.txt", "r")
-        movies = [nm.strip() for nm in file.readlines()]
-        return movies
-    else:
-        return "No such pack exists!"
-def drawWrappedText(surface, text, color, rect, font, aa=False, bkg=None):
-    rect = pygame.Rect(rect)
-    y = rect.top
-    lineSpacing = -2
-
-    # get the height of the font
-    fontHeight = font.size("Tg")[1]
-
-    while text:
-        i = 1
-
-        # determine if the row of text will be outside our area
-        if y + fontHeight > rect.bottom:
-            break
-
-        # determine maximum width of line
-        while font.size(text[:i])[0] < rect.width and i < len(text):
-            i += 1
-
-        # if we've wrapped the text, then adjust the wrap to the last word
-        if i < len(text):
-            i = text.rfind(" ", 0, i) + 1
-
-        # render the line and blit it to the surface
-        if bkg:
-            image = font.render(text[:i], 1, color, bkg)
-            image.set_colorkey(bkg)
-        else:
-            image = font.render(text[:i], aa, color)
-
-        surface.blit(image, (rect.left, y))
-        y += fontHeight + lineSpacing
-
-        # remove the text we just blitted
-        text = text[i:]
-
-    return text
-
-if choice == 2:
-
-    print("Enter the word:")
-    while True:
-        a = input("-").lower()  # \n is newline. lower() converts it to lowercase
-
-        if a != "" and a.isspace() is False and a != "n" and a != "no":  # Check if it is blank or not
-
-            if a not in wordlist:
-                for letr in a:
-                    if letr not in string.ascii_letters:
-                        print("Please enter letters only from A-Z")
-                        break
-            else:
-                print("world already exists! please enter a new wrd")
-            wordlist.append(a)
-
-        else:
-            break
-
-w = random.choice(wordlist)
-word = w.upper()
 
 # setup display
 pygame.init()
@@ -167,6 +73,52 @@ for i in range(7):
 ALMOND = (239, 222, 205)
 AMARANTH = (229, 43, 80)
 
+
+def use_prebuilt_pack(name):
+    if name in custompacks:
+        file = open(f"data\custompacks\{name}.txt", "r")
+        movies = [nm.strip() for nm in file.readlines()]
+        return movies
+    else:
+        return "No such pack exists!"
+
+def drawWrappedText(surface, text, color, rect, font, aa=False, bkg=None):
+    rect = pygame.Rect(rect)
+    y = rect.top
+    lineSpacing = -2
+
+    # get the height of the font
+    fontHeight = font.size("Tg")[1]
+
+    while text:
+        i = 1
+
+        # determine if the row of text will be outside our area
+        if y + fontHeight > rect.bottom:
+            break
+
+        # determine maximum width of line
+        while font.size(text[:i])[0] < rect.width and i < len(text):
+            i += 1
+
+        # if we've wrapped the text, then adjust the wrap to the last word
+        if i < len(text):
+            i = text.rfind(" ", 0, i) + 1
+
+        # render the line and blit it to the surface
+        if bkg:
+            image = font.render(text[:i], 1, color, bkg)
+            image.set_colorkey(bkg)
+        else:
+            image = font.render(text[:i], aa, color)
+
+        surface.blit(image, (rect.left, y))
+        y += fontHeight + lineSpacing
+
+        # remove the text we just blitted
+        text = text[i:]
+
+    return text
 
 def draw():  # def defines a function ~Ansh
     global WIDTH
